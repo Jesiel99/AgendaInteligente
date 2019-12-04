@@ -12,9 +12,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("agenda.fxml"));
-        primaryStage.setTitle("SmartAgenda");
+        primaryStage.setTitle("Agenda");
         primaryStage.setScene(new Scene(root, 800, 400));
-//        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

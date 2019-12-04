@@ -1,50 +1,35 @@
 package sample;
 
-import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
 public class AgendaController implements Initializable {
 
-    private ObservableList<Task> taskList = FXCollections.observableArrayList();
-    private String[] style = {"status-one", "status-two", "status-three",
-            "status-four", "status-five", "status-six", "status-seven", "status-eight", "status-nine", "status-ten",
-            "status-eleven", "status-twelve"};
-    private List<String> styleList;
+    private ObservableList<Tarefa> tarefaList = FXCollections.observableArrayList();
     private final String tasksfileName;
     private JSON json;
 
     @FXML
-    private TextField txtInicio, txtNome, txtDuracao, txtDificuldade, txtTipo, txtPrioridade;
+    private TextField txtInicio, txtNome, txtDuracao, txtTipo;
     @FXML
-    private TableView<Task> taskTable;
+    private ChoiceBox chcbxPrioridade, chcbxDificuldade;
+    @FXML
+    private TableView<Tarefa> taskTable;
     @FXML
     private TableColumn columnInicio, columnFim, columnDuracao, columnNome, columnPrioridade, columnDificuldade, columnTipo;
     @FXML
@@ -54,163 +39,115 @@ public class AgendaController implements Initializable {
 
         tasksfileName = "tasks";
         json = new JSON(tasksfileName);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                taskTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                    if (newSelection != null) {
-                        txtInicio.setText(String.valueOf(newSelection.getInicio()));
-                    }
-                });
-            }
-        });
-
     }
 
-    private void openError() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("ERRO.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 530, 80);
-        Stage stage = new Stage();
-        stage.setTitle("ERRO");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void openConficuracao(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("configuracoes.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 530, 80);
-        Stage stage = new Stage();
-        stage.setTitle("Configuraçao");
-        stage.setScene(scene);
-        stage.show();
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ObservableList<String> tipoPrioridade = FXCollections.observableArrayList();
+        tipoPrioridade.add("P1");
+        tipoPrioridade.add("P2");
+        tipoPrioridade.add("P3");
+        chcbxPrioridade.setItems(tipoPrioridade);
+        ObservableList<String> dificuldades = FXCollections.observableArrayList();
+        dificuldades.add("TRIVIAL");
+        dificuldades.add("FACIL");
+        dificuldades.add("MEDIA");
+        dificuldades.add("DIFICIL");
+        chcbxDificuldade.setItems(dificuldades);
+        try {
+            tarefaList = FXCollections.observableArrayList(json.ler());
+        } catch (Exception ignore) {}
+        refreshTable();
+        taskTable.setItems(tarefaList);
     }
 
     private void push(int index, long minutes) {
-        for (int i = index; i < taskList.size(); i++) {
-            System.out.println(minutes);
-            Task editedTask = taskList.get(i);
-            System.out.println(editedTask.getInicio());
-            editedTask.setInicio(editedTask.getInicio().plusMinutes(minutes));
-            System.out.println(editedTask.getInicio());
-            editedTask.setFim(editedTask.getFim().plusMinutes(minutes));
-            taskList.set(i, editedTask);
+        for (int i = index; i < tarefaList.size(); i++) {
+            Tarefa editedTarefa = tarefaList.get(i);
+            editedTarefa.setInicio(editedTarefa.getInicio().plusMinutes(minutes));
+            editedTarefa.setFim(editedTarefa.getFim().plusMinutes(minutes));
+            tarefaList.set(i, editedTarefa);
         }
         refreshTable();
-        taskTable.setItems(taskList);
+        taskTable.setItems(tarefaList);
+    }
 
+    private boolean isAvailableHr(Tarefa tarefa) throws IOException {
+        ObservableList<HorariosIndisponiveis> hrsAnavailableList = new ConfiguracoesController().getHrsList();
+        for (HorariosIndisponiveis hr : hrsAnavailableList) {
+            int hrMinuteInicio = hr.getInicio().getMinute() + hr.getInicio().getHour()*60;
+            int hrMinuteFim = hr.getFim().getMinute() + hr.getFim().getHour()*60;
+            if (hr.getFim().isBefore(hr.getInicio())) {
+                hrMinuteFim += 60*24;
+            }
+            int taskMinuteInicio = tarefa.getInicio().getMinute() + tarefa.getInicio().getHour()*60;
+            int taskMinuteFim = tarefa.getFim().getMinute() + tarefa.getFim().getHour()*60;
+            if (tarefa.getFim().isBefore(tarefa.getInicio())) {
+                taskMinuteFim += 60*24;
+            }
+            if (hrMinuteFim - 24*60 > taskMinuteInicio) {
+                taskMinuteInicio += 24*60;
+                taskMinuteFim += 24*60;
+            } else if (taskMinuteFim -24*60 > hrMinuteInicio) {
+                hrMinuteInicio += 24*60;
+                hrMinuteFim += 24*60;
+            }
+            if (taskMinuteInicio > hrMinuteInicio && taskMinuteFim < hrMinuteFim
+                    || taskMinuteFim > hrMinuteInicio && taskMinuteFim < hrMinuteFim)
+                return false;
+        }
+        return true;
     }
 
     @FXML
     private void addTask() throws IOException  {
-
         LocalDateTime NOW = LocalDateTime.now();
-        Task task = new Task();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-        task.setInicio(LocalDateTime.parse(txtInicio.getText(), formatter));
-        task.setDuracao(txtDuracao.getText());
-        task.setNome(txtNome.getText());
-        task.setTipo(txtTipo.getText());
-        task.setDificuldade(txtDificuldade.getText());
-        task.setPrioridade(txtPrioridade.getText());
+        Tarefa tarefa = new Tarefa();
+        tarefa.setInicio(Cast.stringToLocalDateTime(txtInicio.getText()));
+        tarefa.setDuracao(txtDuracao.getText());
+        tarefa.setNome(txtNome.getText());
+        tarefa.setTipo(txtTipo.getText());
+        tarefa.setDificuldade((String) chcbxDificuldade.getValue());
+        tarefa.setPrioridade((String) chcbxPrioridade.getValue());
 
-        if (task.getInicio().isBefore(NOW)) {
-            openError();
-        } else if (taskList.isEmpty() || taskList.get(taskList.size() - 1).getFim().isBefore(task.getInicio())) {
-            taskList.add(task);
+        if (tarefa.getInicio().isBefore(NOW)) {
+            openWindow("ERRO", "ERRO", 530, 80);
+        } else if (!isAvailableHr(tarefa)) {
+            openWindow("ERRO", "ERRO", 530, 80);
+        } else if (tarefaList.isEmpty() || tarefaList.get(tarefaList.size() - 1).getFim().isBefore(tarefa.getInicio())) {
+            tarefaList.add(tarefa);
         } else {
             int i;
-            for (i = 0; i < taskList.size(); i++) {
-                if (taskList.get(i).getFim().isAfter(task.getInicio())) {
-                    taskList.add(i, task);
+            for (i = 0; i < tarefaList.size(); i++) {
+                if (tarefaList.get(i).getFim().isAfter(tarefa.getInicio())) {
+                    tarefaList.add(i, tarefa);
                     break;
-                } else if (taskList.get(i).getFim().isEqual(task.getInicio())) {
+                } else if (tarefaList.get(i).getFim().isEqual(tarefa.getInicio())) {
                     int j;
                     try {
-                        for (j = i; taskList.get(j).getFim().isEqual(task.getInicio()); j++) ;
-                        System.out.println(j);
-                        taskList.add(j, task);
+                        for (j = i; tarefaList.get(j).getFim().isEqual(tarefa.getInicio()); j++) ;
+                        tarefaList.add(j, tarefa);
                     } catch (Exception e) {
-                        taskList.add(task);
+                        tarefaList.add(tarefa);
                     }
                     break;
                 }
             }
-            if (task.getFim().isAfter(taskList.get(i+1).getInicio())) {
-                push(i+1, taskList.get(i+1).getInicio().until(taskList.get(i).getFim(), ChronoUnit.MINUTES));
+            if (tarefa.getFim().isAfter(tarefaList.get(i+1).getInicio())) {
+                push(i+1, tarefaList.get(i+1).getInicio().until(tarefaList.get(i).getFim(), ChronoUnit.MINUTES));
             }
         }
         refreshTable();
-        taskTable.setItems(taskList);
-        lblLCM.setText(Integer.toString(Scheduler.calcLCM(taskList)));
-        json.gravar(taskList);
+        taskTable.setItems(tarefaList);
+        json.gravar(tarefaList);
         taskTable.setEditable(true);
 //        columnNome.setCellValueFactory(TextFieldTableCell.forTableColumn());
 //        columnTipo.setCellValueFactory(TextFieldTableCell.forTableColumn());
     }
 
-
-    @FXML
-    private void schedule() {
-
-        styleList = new ArrayList<>(Arrays.asList(style));
-        TimelineChart chart = drawChart();
-        int width = 800; //Integer.parseInt(lblLCM.getText()) * 55;
-        int height = 400; //taskList.size() * 20 * 2 + 100;
-        Scene scene  = new Scene(chart, width, height);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-
-    private TimelineChart drawChart() {
-
-        List<Task> resultList = new ArrayList<>(Scheduler.schedule(taskList));
-        List<String> nameList = new ArrayList<>();
-
-        NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("Execution Time");
-        xAxis.setAutoRanging(false);
-        xAxis.setMinorTickCount(5);
-        xAxis.setLowerBound(0);
-        xAxis.setUpperBound(Double.parseDouble(lblLCM.getText()));
-        xAxis.setTickUnit(1);
-        CategoryAxis yAxis = new CategoryAxis();
-        yAxis.setLabel("Task ID");
-        yAxis.setTickLabelGap(10);
-        yAxis.setAutoRanging(false);
-        yAxis.setCategories(FXCollections.observableArrayList(nameList));
-
-        final TimelineChart chart = new TimelineChart(xAxis, yAxis);
-        chart.setTitle("Rate Monotonic Schedule");
-        chart.setLegendVisible(false);
-
-        ObservableList<XYChart.Series<Number, String>> chartData = FXCollections.observableArrayList();
-        for(Task t : taskList) {
-            ObservableList<XYChart.Data<Number, String>> seriesData = FXCollections.observableArrayList();
-            String styleClass = getRandomStyle();
-            chartData.add(new XYChart.Series<>(seriesData));
-        }
-        chart.setData(chartData);
-        chart.getStylesheets().add(getClass().getResource("timeline.css").toExternalForm());
-
-        return chart;
-    }
-
-    private String getRandomStyle() {
-        Random random = new Random();
-        int randomIndex = random.nextInt(styleList.size());
-        String randomStyle = styleList.get(randomIndex);
-        styleList.remove(randomIndex);
-        return randomStyle;
-    }
-
-
     public void onEditChanged(TableColumn.CellEditEvent cellEditEvent) {
-        Task task = taskTable.getSelectionModel().getSelectedItem();
-        task.setNome((String) cellEditEvent.getNewValue());
+        Tarefa tarefa = taskTable.getSelectionModel().getSelectedItem();
+        tarefa.setNome((String) cellEditEvent.getNewValue());
     }
 
     private void refreshTable() {
@@ -242,21 +179,30 @@ public class AgendaController implements Initializable {
         } catch (Exception ignore) {
         }
     }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            taskList = FXCollections.observableArrayList(json.ler());
-        } catch (Exception ignore) {}
-        refreshTable();
-        taskTable.setItems(taskList);
 
-//        editableCols();
-    }
+
 
     private void editableCols() {
 //        columnNome.setCellFactory(TextFieldTableCell.forTableColumn());
 //        columnNome.getTableView().getRowFactory()
     }
+
+
+
+    private void openWindow(String fxmlName, String stageTitle, int width, int height) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource(fxmlName + ".fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), width, height);
+        Stage stage = new Stage();
+        stage.setTitle(stageTitle);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void openWindow(ActionEvent actionEvent) throws IOException {
+        openWindow("configuracoes", "Configuracoes", 400, 340);
+    }
+
 
 
 }

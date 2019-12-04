@@ -1,20 +1,16 @@
 package sample;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
-public class Task implements Comparable<Task> {
+public class Tarefa implements Comparable<Tarefa> {
 
     private static int count = 0;
     private LocalDateTime inicio, fim;
     private String nome, tipo, duracao, dificuldade, prioridade;
 
 
-    public Task() {
+    public Tarefa() {
         count++;
     }
 
@@ -87,7 +83,7 @@ public class Task implements Comparable<Task> {
     }
 
     @Override
-    public int compareTo(Task other) {
+    public int compareTo(Tarefa other) {
 //        int compare = Integer.compare(String.valueOf(this.beg), String.valueOf(other.beg));
         return 1;
     }

@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.time.ZoneId;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -32,7 +31,7 @@ public class JSON {
         gson = builder.create();
     }
 
-    public void gravar(List<Task> lista) {
+    public void gravar(List<Tarefa> lista) {
         try {
             FileWriter writer = new FileWriter(fileName);
             writer.write(gson.toJson(lista));
@@ -42,12 +41,36 @@ public class JSON {
         }
     }
 
-    public List<Task> ler() {
+    public void gravarHorario(List<HorariosIndisponiveis> lista) {
+        try {
+            FileWriter writer = new FileWriter(fileName);
+            writer.write(gson.toJson(lista));
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<HorariosIndisponiveis> lerHorario() {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-            Type listType = new TypeToken<ArrayList<Task>>() {
+            Type listType = new TypeToken<ArrayList<HorariosIndisponiveis>>() {
             }.getType();
-            List<Task> lista = new ArrayList<Task>();
+            List<HorariosIndisponiveis> lista = new ArrayList<HorariosIndisponiveis>();
+            lista = new Gson().fromJson(bufferedReader, listType);
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Tarefa> ler() {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            Type listType = new TypeToken<ArrayList<Tarefa>>() {
+            }.getType();
+            List<Tarefa> lista = new ArrayList<Tarefa>();
             lista = new Gson().fromJson(bufferedReader, listType);
             return lista;
         } catch (Exception e) {
