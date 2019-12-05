@@ -54,7 +54,7 @@
                   <TextField fx:id="txtDuracao" alignment="CENTER" prefHeight="24.0" prefWidth="115.0" text="00:00" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
                   <Label text="Dificuldade" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
                   <Label prefHeight="26.0" prefWidth="122.0" text="Data/Tempo Inicio" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtInicio" alignment="CENTER" text="2020/12/12 00:00" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtInicio" alignment="CENTER" text="2019/12/12 08:00" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label text="Nome" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
                   <Label text="Tipo" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <TextField fx:id="txtTipo" GridPane.columnIndex="5" GridPane.rowIndex="1" />

@@ -15,6 +15,4 @@ public class Cast {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         return LocalDateTime.parse(date, formatter);
     }
-
-
 }

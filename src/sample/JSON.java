@@ -41,7 +41,7 @@ public class JSON {
         }
     }
 
-    public void gravarHorario(List<HorariosIndisponiveis> lista) {
+    public void gravarHorario(List<Intervalo> lista) {
         try {
             FileWriter writer = new FileWriter(fileName);
             writer.write(gson.toJson(lista));
@@ -51,12 +51,12 @@ public class JSON {
         }
     }
 
-    public List<HorariosIndisponiveis> lerHorario() {
+        public List<Intervalo> lerHorario() {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-            Type listType = new TypeToken<ArrayList<HorariosIndisponiveis>>() {
+            Type listType = new TypeToken<ArrayList<Intervalo>>() {
             }.getType();
-            List<HorariosIndisponiveis> lista = new ArrayList<HorariosIndisponiveis>();
+            List<Intervalo> lista = new ArrayList<Intervalo>();
             lista = new Gson().fromJson(bufferedReader, listType);
             return lista;
         } catch (Exception e) {

@@ -17,14 +17,14 @@ import java.util.ResourceBundle;
 public class ConfiguracoesController implements Initializable {
 
     @FXML
-    TextField txtInicio, txtFim;
+    private TextField txtInicio, txtFim;
     @FXML
-    private TableView<HorariosIndisponiveis> hrsTable;
+    private TableView<Intervalo> hrsTable;
     @FXML
     private TableColumn columnInicio, columnFim;
 
     private JSON json;
-    private ObservableList<HorariosIndisponiveis> hrsList = FXCollections.observableArrayList();
+    private ObservableList<Intervalo> hrsList = FXCollections.observableArrayList();
 
     public ConfiguracoesController() throws IOException {
         json = new JSON("configuracao");
@@ -55,17 +55,17 @@ public class ConfiguracoesController implements Initializable {
 
     public void addHorarioIndisponivel(ActionEvent actionEvent) {
 
-        hrsList.add(new HorariosIndisponiveis(txtInicio.getText(), txtFim.getText()));
+        hrsList.add(new Intervalo(txtInicio.getText(), txtFim.getText()));
         refreshTable();
         hrsTable.setItems(hrsList);
         json.gravarHorario(hrsList);
     }
 
-    public ObservableList<HorariosIndisponiveis> getHrsList() {
+    public ObservableList<Intervalo> getHrsList() {
         return hrsList;
     }
 
-    public void setHrsList(ObservableList<HorariosIndisponiveis> hrsList) {
+    public void setHrsList(ObservableList<Intervalo> hrsList) {
         hrsList = hrsList;
     }
 }

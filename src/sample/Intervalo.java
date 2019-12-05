@@ -2,9 +2,9 @@ package sample;
 
 import java.time.LocalTime;
 
-public class HorariosIndisponiveis {
+public class Intervalo {
 
-    HorariosIndisponiveis(String inicio, String fim) {
+    Intervalo(String inicio, String fim) {
         this.inicio = Cast.stringToLocalTime(inicio);
         this.fim = Cast.stringToLocalTime(fim);
     }

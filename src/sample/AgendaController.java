@@ -21,7 +21,6 @@ import java.util.*;
 public class AgendaController implements Initializable {
 
     private ObservableList<Tarefa> tarefaList = FXCollections.observableArrayList();
-    private final String tasksfileName;
     private JSON json;
 
     @FXML
@@ -32,13 +31,9 @@ public class AgendaController implements Initializable {
     private TableView<Tarefa> taskTable;
     @FXML
     private TableColumn columnInicio, columnFim, columnDuracao, columnNome, columnPrioridade, columnDificuldade, columnTipo;
-    @FXML
-    private Label lblLCM;
 
     public AgendaController() throws IOException {
-
-        tasksfileName = "tasks";
-        json = new JSON(tasksfileName);
+        json = new JSON("tasks");
     }
 
     @Override
@@ -61,20 +56,21 @@ public class AgendaController implements Initializable {
         taskTable.setItems(tarefaList);
     }
 
-    private void push(int index, long minutes) {
-        for (int i = index; i < tarefaList.size(); i++) {
-            Tarefa editedTarefa = tarefaList.get(i);
-            editedTarefa.setInicio(editedTarefa.getInicio().plusMinutes(minutes));
-            editedTarefa.setFim(editedTarefa.getFim().plusMinutes(minutes));
-            tarefaList.set(i, editedTarefa);
+    private void push(int index, long minutes) throws IOException {
+        Tarefa editedTarefa = tarefaList.get(index);
+        editedTarefa.setInicio(editedTarefa.getInicio().plusMinutes(minutes));
+        editedTarefa.setFim(editedTarefa.getFim().plusMinutes(minutes));
+        if (timeToPush(editedTarefa) != 0) {
+            push(index+1, timeToPush(editedTarefa));
         }
+        tarefaList.set(index, editedTarefa);
         refreshTable();
         taskTable.setItems(tarefaList);
     }
 
-    private boolean isAvailableHr(Tarefa tarefa) throws IOException {
-        ObservableList<HorariosIndisponiveis> hrsAnavailableList = new ConfiguracoesController().getHrsList();
-        for (HorariosIndisponiveis hr : hrsAnavailableList) {
+    private long timeToPush(Tarefa tarefa) throws IOException {
+        ObservableList<Intervalo> hrsAnavailableList = new ConfiguracoesController().getHrsList();
+        for (Intervalo hr : hrsAnavailableList) {
             int hrMinuteInicio = hr.getInicio().getMinute() + hr.getInicio().getHour()*60;
             int hrMinuteFim = hr.getFim().getMinute() + hr.getFim().getHour()*60;
             if (hr.getFim().isBefore(hr.getInicio())) {
@@ -92,11 +88,12 @@ public class AgendaController implements Initializable {
                 hrMinuteInicio += 24*60;
                 hrMinuteFim += 24*60;
             }
-            if (taskMinuteInicio > hrMinuteInicio && taskMinuteFim < hrMinuteFim
-                    || taskMinuteFim > hrMinuteInicio && taskMinuteFim < hrMinuteFim)
-                return false;
+            if (taskMinuteInicio > hrMinuteInicio && taskMinuteInicio < hrMinuteFim
+                    || taskMinuteFim > hrMinuteInicio && taskMinuteFim < hrMinuteFim) {
+                return hrMinuteFim - taskMinuteInicio;
+            }
         }
-        return true;
+        return 0;
     }
 
     @FXML
@@ -109,29 +106,28 @@ public class AgendaController implements Initializable {
         tarefa.setTipo(txtTipo.getText());
         tarefa.setDificuldade((String) chcbxDificuldade.getValue());
         tarefa.setPrioridade((String) chcbxPrioridade.getValue());
-
+        int i;
         if (tarefa.getInicio().isBefore(NOW)) {
-            openWindow("ERRO", "ERRO", 530, 80);
-        } else if (!isAvailableHr(tarefa)) {
             openWindow("ERRO", "ERRO", 530, 80);
         } else if (tarefaList.isEmpty() || tarefaList.get(tarefaList.size() - 1).getFim().isBefore(tarefa.getInicio())) {
             tarefaList.add(tarefa);
         } else {
-            int i;
             for (i = 0; i < tarefaList.size(); i++) {
                 if (tarefaList.get(i).getFim().isAfter(tarefa.getInicio())) {
                     tarefaList.add(i, tarefa);
                     break;
                 } else if (tarefaList.get(i).getFim().isEqual(tarefa.getInicio())) {
-                    int j;
                     try {
-                        for (j = i; tarefaList.get(j).getFim().isEqual(tarefa.getInicio()); j++) ;
-                        tarefaList.add(j, tarefa);
+                        for (i = i; tarefaList.get(i).getFim().isEqual(tarefa.getInicio()); i++) ;
+                        tarefaList.add(i, tarefa);
                     } catch (Exception e) {
                         tarefaList.add(tarefa);
                     }
                     break;
                 }
+            }
+            if (timeToPush(tarefa) != 0) {
+                push(i, timeToPush(tarefa));
             }
             if (tarefa.getFim().isAfter(tarefaList.get(i+1).getInicio())) {
                 push(i+1, tarefaList.get(i+1).getInicio().until(tarefaList.get(i).getFim(), ChronoUnit.MINUTES));
