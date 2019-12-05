@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ConfiguracoesController implements Initializable {
+public class Configuracoes implements Initializable {
 
     @FXML
     private TextField txtInicio, txtFim;
@@ -26,7 +26,7 @@ public class ConfiguracoesController implements Initializable {
     private JSON json;
     private ObservableList<Intervalo> hrsList = FXCollections.observableArrayList();
 
-    public ConfiguracoesController() throws IOException {
+    public Configuracoes() throws IOException {
         json = new JSON("configuracao");
         System.out.println(json.lerHorario());
         try {

@@ -55,9 +55,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="module-info" />
+        <option value="Enum" />
         <option value="FxmlFile" />
         <option value="Class" />
-        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -224,10 +224,10 @@
       <screen x="0" y="27" width="1366" height="741" />
     </state>
     <state x="141" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1366.741@0.27.1366.741" timestamp="1575063278560" />
-    <state x="491" y="86" width="544" height="592" key="#com.intellij.ide.util.MemberChooser" timestamp="1575468902140">
+    <state x="491" y="86" width="544" height="592" key="#com.intellij.ide.util.MemberChooser" timestamp="1575517729924">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="491" y="86" width="544" height="592" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1575468902140" />
+    <state x="491" y="86" width="544" height="592" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1575517729924" />
     <state x="491" y="110" width="544" height="571" key="#com.intellij.ide.util.MemberChooser/0.27.1366.741@0.27.1366.741" timestamp="1575333765463" />
     <state x="321" y="0" width="937" height="768" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1575498266310">
       <screen x="0" y="0" width="1366" height="768" />
@@ -243,25 +243,25 @@
     </state>
     <state x="305" y="117" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1575458247565" />
     <state x="305" y="140" width="735" height="503" key="FileChooserDialogImpl/0.27.1366.741@0.27.1366.741" timestamp="1575288353699" />
-    <state width="1366" height="173" key="GridCell.Tab.0.bottom" timestamp="1575505456378">
+    <state width="1366" height="173" key="GridCell.Tab.0.bottom" timestamp="1575522645450">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1366" height="173" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1575505456378" />
+    <state width="1366" height="173" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1575522645450" />
     <state width="1366" height="183" key="GridCell.Tab.0.bottom/0.27.1366.741@0.27.1366.741" timestamp="1575379105807" />
-    <state width="1366" height="173" key="GridCell.Tab.0.center" timestamp="1575505456378">
+    <state width="1366" height="173" key="GridCell.Tab.0.center" timestamp="1575522645449">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1366" height="173" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1575505456378" />
+    <state width="1366" height="173" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1575522645449" />
     <state width="1366" height="183" key="GridCell.Tab.0.center/0.27.1366.741@0.27.1366.741" timestamp="1575379105807" />
-    <state width="1366" height="173" key="GridCell.Tab.0.left" timestamp="1575505456378">
+    <state width="1366" height="173" key="GridCell.Tab.0.left" timestamp="1575522645449">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1366" height="173" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1575505456378" />
+    <state width="1366" height="173" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1575522645449" />
     <state width="1366" height="183" key="GridCell.Tab.0.left/0.27.1366.741@0.27.1366.741" timestamp="1575379105806" />
-    <state width="1366" height="173" key="GridCell.Tab.0.right" timestamp="1575505456378">
+    <state width="1366" height="173" key="GridCell.Tab.0.right" timestamp="1575522645450">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1366" height="173" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1575505456378" />
+    <state width="1366" height="173" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1575522645450" />
     <state width="1366" height="183" key="GridCell.Tab.0.right/0.27.1366.741@0.27.1366.741" timestamp="1575379105807" />
     <state width="1366" height="238" key="GridCell.Tab.1.bottom" timestamp="1575494215102">
       <screen x="0" y="0" width="1366" height="768" />
@@ -288,19 +288,24 @@
     </state>
     <state x="409" y="194" key="com.intellij.ide.util.TipDialog/0.0.1366.768@0.0.1366.768" timestamp="1575485579824" />
     <state x="409" y="214" key="com.intellij.ide.util.TipDialog/0.27.1366.741@0.27.1366.741" timestamp="1575372056953" />
+    <state x="336" y="2" width="753" height="764" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1575518495846">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="336" y="2" width="753" height="764" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1366.768@0.0.1366.768" timestamp="1575518495846" />
     <state x="0" y="0" width="1025" height="546" maximized="true" key="dock-window-1" timestamp="1575496994047">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="0" y="0" width="1025" height="546" maximized="true" key="dock-window-1/0.0.1366.768@0.0.1366.768" timestamp="1575496994047" />
     <state x="310" y="27" width="1025" height="509" maximized="true" key="dock-window-1/0.27.1366.741@0.27.1366.741" timestamp="1575372810097" />
-    <state x="37" y="0" width="1025" height="546" maximized="true" key="dock-window-2" timestamp="1575496246732">
+    <state x="0" y="0" width="1025" height="546" maximized="true" key="dock-window-2" timestamp="1575514651916">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="37" y="0" width="1025" height="546" maximized="true" key="dock-window-2/0.0.1366.768@0.0.1366.768" timestamp="1575496246732" />
+    <state x="0" y="0" width="1025" height="546" maximized="true" key="dock-window-2/0.0.1366.768@0.0.1366.768" timestamp="1575514651916" />
     <state x="256" y="27" width="1025" height="509" maximized="true" key="dock-window-2/0.27.1366.741@0.27.1366.741" timestamp="1575374323049" />
-    <state x="324" y="27" width="1025" height="509" maximized="true" key="dock-window-3" timestamp="1575372713213">
-      <screen x="0" y="27" width="1366" height="741" />
+    <state x="162" y="0" width="1025" height="546" maximized="true" key="dock-window-3" timestamp="1575518249867">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="162" y="0" width="1025" height="546" maximized="true" key="dock-window-3/0.0.1366.768@0.0.1366.768" timestamp="1575518249867" />
     <state x="324" y="27" width="1025" height="509" maximized="true" key="dock-window-3/0.27.1366.741@0.27.1366.741" timestamp="1575372713213" />
     <state x="0" y="27" width="710" height="741" key="find.popup" timestamp="1575237783345">
       <screen x="0" y="27" width="1366" height="741" />
@@ -311,5 +316,9 @@
     </state>
     <state x="0" y="77" key="new project wizard/0.0.1366.768@0.0.1366.768" timestamp="1575458265787" />
     <state x="0" y="101" width="1356" height="590" key="new project wizard/0.27.1366.741@0.27.1366.741" timestamp="1575203789132" />
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1575522390698">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1575522390698" />
   </component>
 </project>

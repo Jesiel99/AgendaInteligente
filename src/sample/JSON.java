@@ -41,6 +41,17 @@ public class JSON {
         }
     }
 
+    public void gravar(String string) {
+        try {
+            FileWriter writer = new FileWriter(fileName);
+            writer.write(string);
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void gravarHorario(List<Intervalo> lista) {
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -78,21 +89,21 @@ public class JSON {
             return null;
         }
     }
-/*
-    public void incluir(String array) throws IOException {
-        // TODO Auto-generated method stub
-        List<String> list = new ArrayList<String>();
+
+
+
+    public void add(Tarefa task) throws IOException {
+        List<Tarefa> list = new ArrayList<Tarefa>();
         if (ler() == null) {
-            list.add(array);
+            list.add(task);
             gravar(list);
         } else {
             list = ler();
-            list.add(array);
+            list.add(task);
             gravar(list);
         }
-
     }
-*/
+
     /**
      * @return the fileName
      */
