@@ -61,8 +61,12 @@ public class Agenda implements Initializable {
         Tarefa editedTarefa = tarefaList.get(index);
         editedTarefa.setInicio(editedTarefa.getInicio().plusMinutes(minutes));
         editedTarefa.setFim(editedTarefa.getFim().plusMinutes(minutes));
+
         if (timeToPush(editedTarefa) != 0) {
             push(index + 1, timeToPush(editedTarefa));
+        }
+        if (editedTarefa.getFim().isAfter(tarefaList.get(index+1).getInicio())) {
+            push(index + 1, tarefaList.get(index + 1).getInicio().until(editedTarefa.getFim(), ChronoUnit.MINUTES));
         }
         tarefaList.set(index, editedTarefa);
         refreshTable();
@@ -93,6 +97,7 @@ public class Agenda implements Initializable {
                     || taskMinuteFim > hrMinuteInicio && taskMinuteFim < hrMinuteFim) {
                 return hrMinuteFim - taskMinuteInicio;
             }
+            System.out.println(hrMinuteFim - taskMinuteInicio);
         }
         return 0;
     }
@@ -136,7 +141,8 @@ public class Agenda implements Initializable {
             if (timeToPush(tarefa) != 0) {
                 push(i, timeToPush(tarefa));
             }
-            if (i < tarefaList.size()-1 && tarefa.getFim().isAfter(tarefaList.get(i + 1).getInicio())) {
+
+            if (i < tarefaList.size() - 1 && tarefa.getFim().isAfter(tarefaList.get(i + 1).getInicio())) {
                 push(i + 1, tarefaList.get(i + 1).getInicio().until(tarefaList.get(i).getFim(), ChronoUnit.MINUTES));
             }
 
